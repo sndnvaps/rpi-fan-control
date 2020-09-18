@@ -16,7 +16,7 @@ import (
 func main() {
 	minTemp := flag.Float64("stop", 60, "Temperature to stop fan at Celsius temp")
 	maxTemp := flag.Float64("start", 70, "Temperature to start fan at Celsius temp")
-	tempSource := flag.String("source", "/sys/class/thermal/thermal_zone0/temp", "Patho to file of temperature source")
+	tempSource := flag.String("source", "/sys/class/thermal/thermal_zone0/temp", "Path to file of temperature source")
 	gpioPin := flag.Int("pin", 16, "GPIO pin for fan control")
 	flag.Parse()
 
