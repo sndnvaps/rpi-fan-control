@@ -13,4 +13,10 @@ Usage of ./rpi-fan-control:
   -stop float
     	Temperature to stop fan at Celsius temp (default 60)
 ```
+Example
+
+```
+./rpi-fan-control -pin=16 -start=50 -stop=35
+```
+
 
