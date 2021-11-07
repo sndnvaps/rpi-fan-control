@@ -8,39 +8,36 @@
 
 # Default-Stop:        0 1 6
 
-# Short-Description:    Raspberry Pi cpuinfo initscript
+# Short-Description:    Raspberry Pi 5v fan_control initscript
 # origin post by https://www.jianshu.com/p/425edae3fc63
-# /etc/init.d/rpi_fan_control start|status|stop
+# /etc/init.d/rpi_fan_control start|status|stop|reload|restart|force-reload
 
 PROG="rpi_fan_control"
 
 PROG_PATH="/usr/local/rpi_fan_control"
-PROG_ARGS="-start=50 -stop=35"
-
-PIDFILE="/var/run/$PROG.pid"
+PROG_ARGS="-start=50 -stop=38"
 
 DELAY=5
 
 start() {
-	if [ -e $PIDFILE ]; then
+	fan_control_pid=$(ps -e|grep $PROG|awk '{print $1}')
+	if [ ! -n "$fan_control_pid" ]; then
 		echo "Error! $PROG is currently running!" 1>&2
 		exit 1
 	else
 		cd $PROG_PATH
 		./$PROG $PROG_ARGS &
 		echo "$PROG started, waiting $DELAY seconds..."
-		touch $PIDFILE
 	fi
 }
 
 stop() {
-	cpuinfopid=$(ps -e|grep $PROG|awk '{print $1}')
-	if [ ! -n "$cpuinfopid" ]; then
+	fan_control_pid=$(ps -e|grep $PROG|awk '{print $1}')
+	if [ ! -n "$fan_control_pid" ]; then
 		echo "Cant't Find $PROG Process"
 	else
-		echo "Stop $PROG... pid: $cpuinfopid" 1>&2
-		kill -9 $cpuinfopid
-		rm -rf $PIDFILE
+		echo "Stop $PROG... pid: $fan_control_pid" 1>&2
+		kill -9 $fan_control_pid
 	fi
 }
 
@@ -72,6 +69,6 @@ case "$1" in
 		start
 	;;
 	*)
-		echo "Usage: $0 {start|stop|status|reload}" 1>&2
+		echo "Usage: $0 {start|stop|status|reload|restart|force-reload}" 1>&2
 		exit 1
 esac
